@@ -1,0 +1,81 @@
+{
+  "spec": {
+    "scalars": [
+      0.5
+    ],
+    "ecm": [
+      true,
+      false
+    ],
+    "valley_reapers": [
+      "top_fitness"
+    ],
+    "valley_caps": [
+      200
+    ],
+    "slots_per_peak": [
+      10
+    ],
+    "n_reps": 20,
+    "k_peaks": 5,
+    "max_generations": 600,
+    "displacement": "fitness_based",
+    "fitness_rule": "max_to_nearest",
+    "exit_fitness": 0.99999,
+    "children_per_parent": 10,
+    "total_runs": 40
+  },
+  "peak_mode": "close",
+  "peak_indices": [
+    0,
+    13,
+    16,
+    36,
+    84
+  ],
+  "peaks": [
+    "might you not know she would do as she has done by sending me a letter",
+    "first i would have you note this is an honourable man",
+    "when you are gentle you shall have one too and not till then",
+    "if you knew how much they do to import you would make haste",
+    "nay you need not to stop your nose sir i spake but by a metaphor"
+  ],
+  "seeds": [
+    "it was getting dark and we werent there yet",
+    "joe made the sugar cookies susan decorated them",
+    "i really want to go to work but i am too sick to drive",
+    "she only paints with bold colors she does not like pastels",
+    "cats are good pets for they are clean and are not noisy",
+    "she wrote him a long letter but he didnt read it",
+    "we have never been to asia nor have we visited africa",
+    "i love eating toasted cheese and tuna sandwiches",
+    "the sky is clear the stars are twinkling",
+    "i am counting my calories yet i really want dessert",
+    "she advised him to come back at once",
+    "she was too short to see over the fence",
+    "the quick brown fox jumps over the lazy dog",
+    "he ran out of money so he had to stop playing poker",
+    "the memory we used to share is no longer coherent",
+    "if i dont like something ill stay away from it"
+  ],
+  "extinction_gen": 350,
+  "new_peak_indices": [
+    11,
+    30,
+    32,
+    33,
+    39
+  ],
+  "new_peaks": [
+    "faith theres no way to be rid ont but by the way to the pox",
+    "i think there is not in the world either malice or matter to alter it",
+    "madam he hath not slept tonight commanded none should come at him",
+    "no by my troth not so much as will serve to prologue to an egg and butter",
+    "tell thou the earl that the lord bardolph doth attend him here"
+  ],
+  "dictionary_words": 110879,
+  "bfg_stage2_md5": "ee3f2dc5ddae8c70dae18b72e9586764",
+  "workers": 8,
+  "smoke": false,
+  "data_source": "BFG_Simulation_v6.ipynb (canonical dict/targets/seeds)"
+}

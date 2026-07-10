@@ -1,0 +1,123 @@
+{
+  "spec": {
+    "conditions": [
+      "ext_period=0 (none)",
+      "ext_period=200"
+    ],
+    "n_reps": 20,
+    "max_generations": 1000,
+    "k_peaks": 5,
+    "extinction_period": 200,
+    "n_clusters": 6,
+    "total_runs": 40
+  },
+  "cluster_indices": [
+    [
+      0,
+      13,
+      16,
+      36,
+      84
+    ],
+    [
+      11,
+      30,
+      32,
+      33,
+      39
+    ],
+    [
+      2,
+      31,
+      80,
+      89,
+      92
+    ],
+    [
+      18,
+      19,
+      37,
+      51,
+      55
+    ],
+    [
+      1,
+      61,
+      70,
+      73,
+      90
+    ],
+    [
+      5,
+      9,
+      59,
+      95,
+      98
+    ]
+  ],
+  "clusters": [
+    [
+      "might you not know she would do as she has done by sending me a letter",
+      "first i would have you note this is an honourable man",
+      "when you are gentle you shall have one too and not till then",
+      "if you knew how much they do to import you would make haste",
+      "nay you need not to stop your nose sir i spake but by a metaphor"
+    ],
+    [
+      "faith theres no way to be rid ont but by the way to the pox",
+      "i think there is not in the world either malice or matter to alter it",
+      "madam he hath not slept tonight commanded none should come at him",
+      "no by my troth not so much as will serve to prologue to an egg and butter",
+      "tell thou the earl that the lord bardolph doth attend him here"
+    ],
+    [
+      "what have you got the picture of old adam newapparelled",
+      "then have you lost a sight which was to be seen cannot be spoken of",
+      "why may not i demand of thine affairs as well as thou of mine",
+      "good night get thee to bed and rest for thou hast need",
+      "did my father strike my gentleman for chiding of his fool"
+    ],
+    [
+      "i the name of something holy sir why stand you in this strange stare",
+      "you mar our labour keep your cabins you do assist the storm",
+      "what is thy name that in the battle thus thou crossest me",
+      "my duty to you both on equal love great kings of france and england",
+      "where is my other life mine own is gone o wheres young talbot"
+    ],
+    [
+      "ist possible that on so little acquaintance you should like her",
+      "fie on myself that have a sword and yet am ready to famish",
+      "while our commission from rome is read let silence be commanded",
+      "at out last encounter the duke of buckingham came from his trial",
+      "my lord you must tell us where the body is and go with us to the king"
+    ],
+    [
+      "i thank thee varrius though hast made good haste come we will walk",
+      "and yours as blunt as the fencers foils which hit but hurt not",
+      "i think she comes and ill prepare my tearstaind eyes to see her miseries",
+      "no no a word how can i grace my talk wanting a hand to give it action",
+      "look look titinius are those my tents where i perceive the fire"
+    ]
+  ],
+  "seeds": [
+    "it was getting dark and we werent there yet",
+    "joe made the sugar cookies susan decorated them",
+    "i really want to go to work but i am too sick to drive",
+    "she only paints with bold colors she does not like pastels",
+    "cats are good pets for they are clean and are not noisy",
+    "she wrote him a long letter but he didnt read it",
+    "we have never been to asia nor have we visited africa",
+    "i love eating toasted cheese and tuna sandwiches",
+    "the sky is clear the stars are twinkling",
+    "i am counting my calories yet i really want dessert",
+    "she advised him to come back at once",
+    "she was too short to see over the fence",
+    "the quick brown fox jumps over the lazy dog",
+    "he ran out of money so he had to stop playing poker",
+    "the memory we used to share is no longer coherent",
+    "if i dont like something ill stay away from it"
+  ],
+  "dictionary_words": 110879,
+  "bfg_stage2_md5": "df0212a93340b877e0edd56070267909",
+  "note": "heritable mut + ecm; extinction arm rotates peak clusters every period"
+}
