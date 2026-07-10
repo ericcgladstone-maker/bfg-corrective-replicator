@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite it as below."
+title: "Error correction broadens adaptive search across rugged fitness landscapes"
+abstract: >-
+  Code, data, and reproducibility materials for a simulation study of error
+  correction in evolving replicator populations, showing that correction helps a
+  population reach and settle more peaks across a rugged fitness landscape, not
+  only reach one faster.
+type: dataset
+authors:
+  - family-names: Brashears
+    given-names: Matthew E.
+    # orcid: "https://orcid.org/[AUTHORS]"
+  - family-names: Gladstone
+    given-names: Eric
+    # orcid: "https://orcid.org/[AUTHORS]"
+  - family-names: Ferrer
+    given-names: Jose
+    # orcid: "https://orcid.org/[AUTHORS]"
+version: "1.0.0"
+date-released: "2026-07-10"
+license: CC0-1.0
+repository-code: "https://github.com/ericcgladstone-maker/bfg-corrective-replicator"
+keywords:
+  - error correction
+  - cultural evolution
+  - fitness landscape
+  - agent-based model
+  - replicator dynamics
+  - adaptation
+doi: "10.17605/OSF.IO/K2PH7"

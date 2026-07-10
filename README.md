@@ -56,7 +56,7 @@ current code and are reported with standard errors.
 
 To keep the repository lean, `data/` here contains the **manifests and per-run summary CSVs** for each
 experiment, which reproduce every reported number and figure given the code. The full
-**per-generation** output is deposited separately. `[AUTHORS: OSF link.]`
+**per-generation** output is deposited on the Open Science Framework at https://doi.org/10.17605/OSF.IO/K2PH7.
 
 ---
 
