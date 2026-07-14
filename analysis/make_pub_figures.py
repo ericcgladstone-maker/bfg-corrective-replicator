@@ -77,8 +77,8 @@ def fig2():
         for sc in scalars:
             v = [float(r["final_peaks_colonized"]) for r in run2
                  if pred(r) and abs(float(r["mutation_scalar"]) - sc) < 1e-9]
-            m, e = mse(v); ms.append(m); es.append(e)
-        ax[0].errorbar(scalars, ms, es, fmt=mk + "-", color=c, label=lab)
+            m, e = mse(v); ms.append(m); es.append(1.96 * e)  # 95% CI
+        ax[0].errorbar(scalars, ms, es, fmt=mk + "-", color=c, label=lab, capsize=3)
     ax[0].set_xlabel("mutation rate multiplier")
     ax[0].set_ylabel("mean peaks colonized")
     ax[0].set_title("Coverage rises then falls with noise")
@@ -153,7 +153,7 @@ def fig4():
     ax[0].errorbar(x, rd_y, [r[2][1] for r in rows], fmt="s--", color=COL["no"], label="random pruning", zorder=3)
     ax[0].set_xlabel("mean inter-peak distance (edits)")
     ax[0].set_ylabel("mean peaks colonized")
-    ax[0].set_title("Random pruning collapses when peaks are unequal")
+    ax[0].set_title("Fitness pruning retains coverage as peaks spread apart")
     ax[0].set_ylim(0, None); ax[0].legend(); pubfig.panel(ax[0], "A")
     adv = [r[1][0] - r[2][0] for r in rows]
     adv_se = [(r[1][1] ** 2 + r[2][1] ** 2) ** 0.5 for r in rows]
@@ -161,7 +161,7 @@ def fig4():
     ax[1].axhline(0, color=COL["gray"], lw=0.8)
     ax[1].set_xlabel("mean inter-peak distance (edits)")
     ax[1].set_ylabel("fitness-pruning advantage")
-    ax[1].set_title("Advantage grows with asymmetry"); pubfig.panel(ax[1], "B")
+    ax[1].set_title("Fitness-pruning advantage across inter-peak distance"); pubfig.panel(ax[1], "B")
     print("fig4 ->", pubfig.finish(fig, os.path.join(OUT, "fig4_reaper.png")))
 
 
@@ -191,8 +191,17 @@ def fig6():
     for r in pg:
         byrun[r["run_id"]][int(r["generation"])] = int(r["peaks_colonized"]); ecm[r["run_id"]] = r["use_ecm"]
     xs = list(range(G, 1000, 25)) + [999]
+    # peaks_colonized is cumulative: carry a terminated run's last count forward rather than
+    # reading absent late generations as zero (pipeline audit 2026-07-13). No run terminates early
+    # in this dataset, so this is identical to the prior output here, but it is the correct rule.
+    gens_by_run = {r: sorted(byrun[r]) for r in byrun}
+    def _cf(r, g):
+        d = byrun[r]
+        if g in d: return d[g]
+        ks = [k for k in gens_by_run[r] if k <= g]
+        return d[ks[-1]] if ks else 0
     def mean_at(g, cond):
-        return statistics.mean([byrun[r].get(g, 0) for r in ecm if ecm[r] == cond])
+        return statistics.mean([_cf(r, g) for r in ecm if ecm[r] == cond])
     fig, ax = plt.subplots(figsize=(5.6, 4.0))
     ax.plot([g - G for g in xs], [mean_at(g, "1") for g in xs], "o-", color=COL["ecm"], ms=4, label="error correction")
     ax.plot([g - G for g in xs], [mean_at(g, "0") for g in xs], "s--", color=COL["no"], ms=4, label="no correction")

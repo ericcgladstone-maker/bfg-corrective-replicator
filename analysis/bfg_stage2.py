@@ -66,7 +66,11 @@ except ModuleNotFoundError:
 
 VALID_CHARS = list("abcdefghijklmnopqrstuvwxyz-'")
 BASE_RATES = {"sub": 0.02, "del": 0.004, "ins": 0.004, "sd": 0.02, "si": 0.004}
-SIMILARITY_THRESHOLD = 0.80  # ECM dictionary match threshold
+import os as _os
+# ECM dictionary match threshold. Default 0.80 (the value used for all prior runs); overridable via
+# the BFG_SIM_THRESHOLD environment variable for the correction-threshold sensitivity sweep. Read at
+# import so spawn workers inherit it; each process runs one threshold, keeping the correction cache valid.
+SIMILARITY_THRESHOLD = float(_os.environ.get("BFG_SIM_THRESHOLD", "0.80"))
 
 
 def get_trigrams(w):
@@ -215,6 +219,11 @@ class Stage2Config:
     mutation_scalar: float = 1.0
     use_ecm: bool = True
     seed: int = 0
+    # fitness-gated correction (mechanism test). None = correct every offspring (default).
+    # 'above' = correct only offspring whose PRE-correction fitness >= gate_threshold (near a peak).
+    # 'below' = correct only offspring whose PRE-correction fitness < gate_threshold (far from peaks).
+    correction_gate: str | None = None
+    gate_threshold: float = 0.90
 
     # --- Stage 2: peaks & selection ---
     n_peaks: int = 5                    # K (start small per comment #2)
@@ -307,6 +316,7 @@ def run_stage2(cfg: Stage2Config, peaks, seeds, word_set, tg_idx, run_id="s2", n
     colonization_source = {}  # peak_idx -> 'valley' | 'in_situ' | 'peak:<j>'
     last_new_colonization = 0
     pre_ext_colonized = None   # peaks colonized just before an extinction event (if any)
+    n_offspring = n_ge_gate = n_corrected = 0  # correction-exposure diagnostics
 
     for g in range(cfg.max_generations):
         # Stage 3: extinction event. Replace the peaks with a new set, displace every
@@ -328,8 +338,19 @@ def run_stage2(cfg: Stage2Config, peaks, seeds, word_set, tg_idx, run_id="s2", n
         for p in population:
             for _ in range(cfg.children_per_parent):
                 cs = mutate(p["s"], cfg.mutation_scalar)
+                n_offspring += 1
                 if cfg.use_ecm:
-                    cs = correct(cs, word_set, tg_idx)
+                    if cfg.correction_gate is None:
+                        cs = correct(cs, word_set, tg_idx); n_corrected += 1
+                    else:
+                        # decide from the mutated (pre-correction) fitness to its nearest peak
+                        pre_fit = assign(cs)[1]
+                        if pre_fit >= cfg.gate_threshold:
+                            n_ge_gate += 1
+                        gate = (pre_fit >= cfg.gate_threshold) if cfg.correction_gate == "above" \
+                            else (pre_fit < cfg.gate_threshold)
+                        if gate:
+                            cs = correct(cs, word_set, tg_idx); n_corrected += 1
                 # child's src = the parent's CURRENT location (peak idx or 'valley').
                 # seeds have no 'loc' yet, so they default to 'valley'.
                 offspring.append({"s": cs, "src": p.get("loc", "valley")})
@@ -432,6 +453,9 @@ def run_stage2(cfg: Stage2Config, peaks, seeds, word_set, tg_idx, run_id="s2", n
             "generations_run": rows[-1]["generation"] + 1 if rows else 0,
             "extinction_gen": cfg.extinction_gen,
             "pre_extinction_peaks_colonized": pre_ext_colonized,
+            "offspring_total": n_offspring,
+            "offspring_ge_gate": n_ge_gate,
+            "offspring_corrected": n_corrected,
         },
     }
 

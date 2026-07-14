@@ -44,7 +44,8 @@ PER_GEN_FIELDS = ["run_id", "mutation_scalar", "use_ecm", "valley_reaper", "vall
 SUMMARY_FIELDS = ["run_id", "mutation_scalar", "use_ecm", "valley_reaper", "valley_capacity", "slots_per_peak", "seed",
                   "generations_run", "final_peaks_colonized", "time_to_blanket",
                   "per_peak_convergence", "colonization_source", "occupancy_distribution",
-                  "extinction_gen", "pre_extinction_peaks_colonized"]
+                  "extinction_gen", "pre_extinction_peaks_colonized",
+                  "offspring_total", "offspring_ge_gate", "offspring_corrected"]
 
 
 def load_real_data():
@@ -88,13 +89,17 @@ def select_peaks_close(targets, k, anchor=0):
 _G = {}
 
 
-def _init(word_set, tg_idx, peak_strs, seeds, max_gens, ext_gen=None, new_peak_strs=None):
+def _init(word_set, tg_idx, peak_strs, seeds, max_gens, ext_gen=None, new_peak_strs=None, colon_fit=None,
+          correction_gate=None, gate_threshold=0.90):
     _G["ws"], _G["tg"] = word_set, tg_idx
     _G["peaks"] = s2.make_peaks(peak_strs)
     _G["seeds"] = seeds
     _G["max_gens"] = max_gens
     _G["ext_gen"] = ext_gen
     _G["new_peaks"] = s2.make_peaks(new_peak_strs) if new_peak_strs else None
+    _G["colon_fit"] = colon_fit
+    _G["correction_gate"] = correction_gate
+    _G["gate_threshold"] = gate_threshold
 
 
 def run_id_of(job):
@@ -111,7 +116,8 @@ def _run(job):
         n_peaks=len(_G["peaks"]), slots_per_peak=slots, valley_capacity=vcap,
         valley_reaper=vreaper, displacement=DISPLACEMENT, fitness_rule=FITNESS_RULE,
         max_generations=_G["max_gens"], mutation_scalar=scalar, use_ecm=use_ecm, seed=seed,
-        extinction_gen=ext,
+        extinction_gen=ext, colonization_fitness=_G.get("colon_fit"),
+        correction_gate=_G.get("correction_gate"), gate_threshold=_G.get("gate_threshold", 0.90),
         stop_on_blanket=(ext is None), no_progress_patience=0)
     out = s2.run_stage2(cfg, _G["peaks"], _G["seeds"], _G["ws"], _G["tg"], run_id=run_id,
                         new_peaks=_G.get("new_peaks"))
@@ -151,6 +157,20 @@ def main():
     ap.add_argument("--peak-indices", default="",
                     help="explicit comma-separated target indices to use as peaks (overrides "
                          "--peaks). Recorded in the manifest. Used for the inter-peak distance sweep.")
+    ap.add_argument("--colon-fit", type=float, default=0.0,
+                    help="colonization fitness threshold (0 = default exit_fitness 0.99999). Set below "
+                         "1.0 to test a relaxed, non-exact colonization criterion.")
+    ap.add_argument("--correct-gate", choices=["above", "below"], default=None,
+                    help="fitness-gated correction (mechanism test): 'above' corrects only offspring whose "
+                         "pre-correction fitness is at or above the gate threshold (near a peak), 'below' "
+                         "corrects only those below it. Default (unset) corrects every offspring.")
+    ap.add_argument("--gate-threshold", type=float, default=0.90,
+                    help="fitness threshold for --correct-gate (default 0.90, the near-target band).")
+    ap.add_argument("--drop-target-words", action="store_true",
+                    help="ablation: remove the peak targets' words from the correction dictionary and "
+                         "rebuild the trigram index, so the codebook does not contain the solution "
+                         "vocabulary. Tests whether the correction advantage depends on codebook-"
+                         "solution alignment. Seeds/peaks/params otherwise identical to the full-dict run.")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     per_gen_csv = os.path.join(args.out, "stage2_per_generation.csv")
@@ -167,7 +187,18 @@ def main():
         peak_idx = select_peaks_close(targets, kp) if args.peaks == "close" else select_peaks(targets, kp)
         peak_mode = args.peaks
     peak_strs = [targets[i] for i in peak_idx]
+    dropped_target_words = 0
+    if args.drop_target_words:
+        drop = set()
+        for ps in peak_strs:
+            drop |= set(ps.split())
+        drop &= word_set
+        dropped_target_words = len(drop)
+        word_set, tg_idx = s2.build_index(word_set - drop)
     _G["max_gens"] = (40 if args.smoke else MAX_GENS) if not args.max_gens else args.max_gens
+    _G["colon_fit"] = args.colon_fit or None
+    _G["correction_gate"] = args.correct_gate
+    _G["gate_threshold"] = args.gate_threshold
 
     # extinction: the new peaks are the NEXT kp targets nearest the anchor (distinct from the
     # old cluster, still reachable), so post-event recovery is observable.
@@ -195,10 +226,13 @@ def main():
                  "valley_caps": vcaps, "slots_per_peak": slotsv, "n_reps": reps,
                  "k_peaks": len(peak_idx), "max_generations": _G["max_gens"],
                  "displacement": DISPLACEMENT, "fitness_rule": FITNESS_RULE,
-                 "exit_fitness": 0.99999, "children_per_parent": 10, "total_runs": len(jobs)},
+                 "exit_fitness": 0.99999, "children_per_parent": 10, "total_runs": len(jobs),
+                 "colonization_fitness": _G.get("colon_fit"),
+                 "similarity_threshold": s2.SIMILARITY_THRESHOLD},
         "peak_mode": peak_mode, "peak_indices": peak_idx, "peaks": peak_strs, "seeds": seeds,
         "extinction_gen": ext_gen, "new_peak_indices": new_idx, "new_peaks": new_peak_strs,
-        "dictionary_words": len(word_set),
+        "dictionary_words": len(word_set), "dropped_target_words": dropped_target_words,
+        "correction_gate": args.correct_gate, "gate_threshold": args.gate_threshold,
         "bfg_stage2_md5": code_hash, "workers": WORKERS, "smoke": args.smoke,
         "data_source": "BFG_Simulation_v6.ipynb (canonical dict/targets/seeds)",
     }
@@ -226,7 +260,8 @@ def main():
     done = len(completed)
     with mp.get_context("spawn").Pool(WORKERS, initializer=_init,
                                       initargs=(word_set, tg_idx, peak_strs, seeds, _G["max_gens"],
-                                                ext_gen, new_peak_strs)) as pool:
+                                                ext_gen, new_peak_strs, _G.get("colon_fit"),
+                                                _G.get("correction_gate"), _G.get("gate_threshold"))) as pool:
         for out in pool.imap_unordered(_run, remaining):
             rid = out["run_id"]
             j = next(j for j in remaining if run_id_of(j) == rid)
@@ -247,7 +282,10 @@ def main():
                 "colonization_source": json.dumps(sm["colonization_source"]),
                 "occupancy_distribution": json.dumps(sm["occupancy_distribution"]),
                 "extinction_gen": sm.get("extinction_gen"),
-                "pre_extinction_peaks_colonized": sm.get("pre_extinction_peaks_colonized")}])
+                "pre_extinction_peaks_colonized": sm.get("pre_extinction_peaks_colonized"),
+                "offspring_total": sm.get("offspring_total"),
+                "offspring_ge_gate": sm.get("offspring_ge_gate"),
+                "offspring_corrected": sm.get("offspring_corrected")}])
             done += 1
             el = time.time() - t0
             rate = (done - len(completed)) / el if el > 0 else 0

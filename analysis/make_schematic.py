@@ -1,4 +1,4 @@
-"""Conceptual schematic (Fig 1): the model cycle (A) and the finishing mechanism (B).
+"""Conceptual schematic (Fig 1): the model cycle (A) and how correction constrains variation (B).
 Hand-drawn in matplotlib in the shared pubfig palette. No data; purely explanatory."""
 import os, sys
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
@@ -8,7 +8,7 @@ pubfig.apply()
 COL = pubfig.COL
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
+from matplotlib.patches import FancyBboxPatch, FancyArrowPatch, Ellipse
 
 OUT = os.path.join(PROJECT, "figures", "pub", "fig1_schematic.png")
 
@@ -57,38 +57,40 @@ axA.text(5.0, 0.9, "example:  “to be or not to be”  →  “tob eor nvt to b
 axA.text(5.0, 0.2, "original            mutated (non-words)          corrected", ha="center", va="center",
          fontsize=7.5, color="#777777")
 
-# ---------------- Panel B: the finishing mechanism ----------------
-axB.set_title("Why correction helps: it finishes the climb", fontweight="bold", loc="center")
+# ---------------- Panel B: constrained variation ----------------
+axB.set_title("Correction confines variation to admissible forms", fontweight="bold", loc="center")
 pubfig.panel(axB, "B", dx=-0.10, dy=1.02)
-x = np.linspace(0, 10, 500)
-land = (np.exp(-((x - 2.2) ** 2) / 0.7) * 0.55 +
-        np.exp(-((x - 5.2) ** 2) / 0.5) * 1.0 +
-        np.exp(-((x - 8.0) ** 2) / 0.8) * 0.75)
-axB.plot(x, land, color="#999999", lw=2)
-axB.fill_between(x, 0, land, color="#F2F2F2")
-axB.set_xlim(0, 10); axB.set_ylim(0, 1.5)
-axB.set_xlabel("genotype space"); axB.set_ylabel("fitness")
-axB.set_xticks([]); axB.set_yticks([])
-axB.spines["left"].set_visible(True)
+axB.set_xlim(0, 10); axB.set_ylim(0, 10); axB.axis("off")
 
-peak_x, peak_y = 5.2, 1.0
-axB.plot([peak_x], [peak_y], marker="*", ms=18, color="#333333", zorder=5)
-axB.text(peak_x, peak_y + 0.12, "exact solution", ha="center", fontsize=9)
+# admissible set (valid word forms) as a shaded region that contains the target components
+adm = Ellipse((6.3, 5.6), 7.0, 6.6, angle=12, facecolor="#EAF3FA",
+              edgecolor=COL["ecm"], lw=1.6, alpha=0.9, zorder=1)
+axB.add_patch(adm)
+axB.text(6.9, 9.0, "admissible set\n(valid word forms)", ha="center", va="center",
+         color=COL["ecm"], fontsize=8.5)
+for tx, ty in [(5.3, 6.2), (7.6, 4.6), (6.6, 7.2)]:
+    axB.plot(tx, ty, marker="*", ms=13, color="#333333", zorder=5)
+axB.text(4.9, 5.4, "target\ncomponents", ha="center", va="top", fontsize=8)
 
-# a near-correct variant just below the peak
-nx, ny = 4.55, 0.80
-axB.plot([nx], [ny], "o", ms=10, color="#333333", zorder=6)
-axB.text(nx - 0.15, ny - 0.16, "near-correct\nvariant", ha="center", va="top", fontsize=8.5)
+# parent near the edge
+px, py = 2.0, 3.2
+axB.plot(px, py, "o", ms=9, color="#333333", zorder=6)
+axB.text(px, py - 0.55, "parent", ha="center", va="top", fontsize=8.5)
 
-# without correction: mutation knocks it back down (vermillion)
-axB.add_patch(FancyArrowPatch((nx, ny), (3.0, 0.28), arrowstyle="-|>", mutation_scale=15,
-                              linewidth=2.2, color=COL["no"], connectionstyle="arc3,rad=0.35", zorder=4))
-axB.text(2.9, 0.42, "without correction:\nmutation displaces it", color=COL["no"], fontsize=8.5, ha="center")
+# uncorrected mutation: offspring scattered broadly, several outside the admissible set
+offs = [(3.5, 1.0), (1.0, 5.4), (3.9, 3.1), (0.9, 2.0), (2.5, 6.7)]
+for ox, oy in offs:
+    axB.add_patch(FancyArrowPatch((px, py), (ox, oy), arrowstyle="-|>", mutation_scale=11,
+                                  lw=1.2, color=COL["no"], alpha=0.7, zorder=3))
+    axB.plot(ox, oy, "o", ms=5, color=COL["no"], zorder=4)
+axB.text(1.1, 0.3, "uncorrected mutation:\ndisperses broadly", color=COL["no"], fontsize=8.5, ha="left")
 
-# with correction: protected, completes the climb (blue)
-axB.add_patch(FancyArrowPatch((nx, ny), (peak_x - 0.12, peak_y - 0.03), arrowstyle="-|>", mutation_scale=15,
-                              linewidth=2.4, color=COL["ecm"], connectionstyle="arc3,rad=-0.3", zorder=4))
-axB.text(4.9, 1.28, "with correction:\nheld until it finishes", color=COL["ecm"], fontsize=8.5, ha="center")
+# correction: projects the outside offspring onto the admissible set
+for (ox, oy), (tx, ty) in [((3.5, 1.0), (4.7, 3.6)), ((0.9, 2.0), (3.5, 4.4)), ((1.0, 5.4), (3.3, 5.6))]:
+    axB.add_patch(FancyArrowPatch((ox, oy), (tx, ty), arrowstyle="-|>", mutation_scale=11,
+                                  lw=1.7, color=COL["ecm"], ls="--", connectionstyle="arc3,rad=0.2", zorder=4))
+axB.text(8.9, 1.7, "correction:\nprojects outputs\nonto admissible forms",
+         color=COL["ecm"], fontsize=8.5, ha="center")
 
 fig.tight_layout()
 fig.savefig(OUT, bbox_inches="tight")

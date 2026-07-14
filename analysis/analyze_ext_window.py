@@ -18,8 +18,17 @@ def main():
     n1 = sum(1 for v in ecm.values() if v == 1)
     print(f"runs: {len(ecm)} ({n1} ECM / {len(ecm)-n1} no)  firing gen {G}, recovery window 750")
 
+    # peaks_colonized is cumulative: carry a terminated run's last count forward (pipeline audit
+    # 2026-07-13). No run terminates early in this dataset, so output is unchanged, but this is
+    # the correct aggregation rule and prevents the late-generation downward bias otherwise.
+    gens_by_run = {r: sorted(byrun[r]) for r in byrun}
+    def _cf(r, g):
+        d = byrun[r]
+        if g in d: return d[g]
+        ks = [k for k in gens_by_run[r] if k <= g]
+        return d[ks[-1]] if ks else 0
     def mean_at(g, e):
-        vs = [byrun[r].get(g, 0) for r in ecm if ecm[r] == e]
+        vs = [_cf(r, g) for r in ecm if ecm[r] == e]
         return statistics.mean(vs) if vs else float("nan")
 
     xs = list(range(G, 1000, 50)) + [999]

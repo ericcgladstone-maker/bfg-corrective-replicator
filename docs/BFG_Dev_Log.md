@@ -1734,3 +1734,227 @@ VERDICT: narrative REVERSED. Random pruning does NOT preserve diversity; it COLL
 - FIGURES (publication quality, figures/pub/, 300dpi, shared style analysis/pubfig.py, colorblind-safe Wong palette): fig1_schematic (model cycle + finisher mechanism, hand-drawn), fig2_coverage, fig3_distance, fig4_reaper (w/ trend lines per Eric), fig5_capacity, fig6_recovery, figS_sources, figS_exttiming. Generators: make_pub_figures.py, make_schematic.py.
 - INTEGRITY CATCH: did NOT fabricate a Stage 1 baseline figure. The only repo Stage 1 data (data/v6) is the 80%-coverage verification variant (confounded, doesn't show the story). Fig 2 (baseline) left as [AUTHORS] placeholder pointing to the original manuscript Figure 1 (figures/Figure 1 Panel A-D.svg) or canonical Stage 1 runs.
 - Figures embedded with standard captions in BOTH manuscript (Fig 1-7) and supplementary (Fig S1-S2); markdown-to-docx converter (manuscript_to_docx.py) gained table + image support. House style enforced (no semicolons/em-dashes). Figure refs verified consistent 1-7. Nothing running.
+
+## Session — July 10, 2026 (cont.) — back matter, author order, GitHub push, OSF deposit, submission folder
+
+**Manuscript finalization**
+- Added PNAS Nexus back matter (all headings present): Acknowledgments (None), Funding (None), Author Contributions (CRediT format), Competing Interests (none declared).
+- AUTHOR ORDER CHANGED to Brashears, Gladstone, Ferrer (Eric now SECOND; pending Eric's talk with Matt). Updated in manuscript, supplementary, old draft, github README. Conceptualization = M.E.B., E.G., J.F. (all three). BFG project acronym kept as codebase name (not a byline).
+- Fixed manuscript_to_docx.py: escaped-asterisk (\*) unescaping (byline markers), plus table + image + page-break + full-path support.
+
+**GitHub — LIVE (public)**: https://github.com/ericcgladstone-maker/bfg-corrective-replicator
+- Refreshed github/ export (was April/May, pre-Stage-2). Added Stage 2 code, data (manifests+summaries only; full per-gen -> OSF), publication figures, updated docs; rewrote README, updated NOTES.
+- Added Jose's Java SOURCE-ONLY (github/original_java/, 300KB; excluded 550MB build/Lucene indices/data).
+- Pushed via /push-github (174 files, 18MB), then re-pushed adding LICENSE (CC0), CITATION.cff, and the OSF DOI in README.
+
+**OSF — LIVE**: project k2ph7, DOI 10.17605/OSF.IO/K2PH7, license CC0 1.0, storage US.
+- Materials drafted in osf/: OSF_project_settings.md, OSF_wiki.md (Eric pasted into wiki), DATA_DICTIONARY.md (codebook), CITATION.cff, assemble_osf_data.sh.
+- Full per-gen data zipped to osf/bfg_full_data.zip (16MB compressed from ~200MB; 127 files, all 22 non-smoke experiment folders + codebook) -> Eric uploading to OSF Files.
+- OSF DOI wired into manuscript Data Availability, CITATION, github README. GitHub<->OSF cross-linked.
+
+**Submission folder**: submission_PNAS_Nexus/ (Cover_Letter, Manuscript, Supplementary, Manuscript_with_Supplementary [merged, page break, ~5800 words], figures/ [Fig1,Fig3-7,FigS1-2 named by submission number], README_SUBMISSION with checklist). Internal DRAFT annotations stripped from these versions (still present in manuscript/ sources). Cover letter drafted with [AUTHORS] fields.
+
+**Remaining author-side [AUTHORS] items**: final title; author order (pending Matt); affiliations + ORCIDs + corresponding author + *//**/*** marker mapping; reference list; baseline Fig 2 (use original manuscript Figure 1, NOT the confounded 80%-coverage v6 data); cover letter fields. Everything else (verified/pooled numbers, audit, figures, GitHub, OSF) DONE and consistent. Nothing running.
+
+## Session — July 12, 2026 — manuscript polish + editorial review
+
+- FIGURES INLINE: moved all figures from the end "Figures" section to inline positions right after their in-text callouts, each with its caption. Manuscript now has 6 inline figures (Fig 2 baseline = text placeholder); SI has 2. Removed the end Figures section.
+- FORMATTING: manuscript_to_docx.py now renders everything Times New Roman 12 BLACK; section titles/headings are bold TNR12 black (Normal style + space before/after, no Word Heading-style color/size). Verified in output.
+- CITATIONS + REFERENCES: added in-text citations throughout (Wright 1932, Dawkins 1976, Hull 1988, Levenshtein 1966, Kunkel 2004, March 1991, Eldredge & Gould 1972, Odling-Smee et al. 2003, Mesoudi 2011, Henrich 2015). Cited both PNAS Nexus guide papers with VERIFIED citations: Camps, Randon-Furling & Godreau 2026 (pgag207) and Oliveira, de Arruda & Moreno 2026 (pgaf402). Built full 23-entry reference list (all real works). Modest expansion of Results/Discussion for clarity (exploration-exploitation tie, niche construction, unifying-mechanism framing).
+- Rebuilt all submission docx (Manuscript, Supplementary, merged Manuscript_with_Supplementary ~6400w) from updated source.
+- EDITORIAL REVIEW written to submission_PNAS_Nexus/Editorial_Review.md (critical handling-editor role). Verdict: sound + reproducible + appealing unifying idea, but MAJOR REVISION as-is driven by (1) model-to-claim generality gap, (2) over-stated "no information about targets" (dictionary is a strong structural prior), (3) modest absolute effect, (4) thin recovery result, (5) missing robust-copying control. Minor-revision-quality once top 5 addressed. Nothing running.
+
+## Session — July 12, 2026 (cont.) — addressed editorial critiques + reviewer report
+
+ADDRESSED (8 text edits in manuscript): (1) "no info about targets" -> precise "structural prior" (dictionary); (2) 95% CIs on headline (0.82-0.98 vs 0.32-0.44); (3) reaper CIs (symmetric adv 0.18 CI includes 0; far 0.60 CI 0.44-0.76) + "asymmetry axis is a proxy" + dropped "roughly tripled"; (4) recovery bounded as single illustrative probe; (5) deferred robust-copying control stated; (6) generality reframed as proof-of-principle (Abstract+Discussion); (7) explicit novelty statement; (8) abstract scope. Rebuilt submission docx. STILL author-side: Fig 2 baseline (canonical data), corrector-robustness run (reframed instead).
+
+REVIEWER REPORT written to submission_PNAS_Nexus/Reviewer_Report.md (technical, section-by-section, distinct from editorial). NEW major points beyond the editor pass: (7) COVERAGE-VS-SPEED under the 500-gen budget (coverage may be finite-time speed running in parallel -> needs asymptotic analysis or reframe) = the central logical gap; (1) "mutation multiplier = ruggedness" is imprecise (multiplier = noise on a FIXED landscape); (10-12) missing foundational lit: Dawkins WEASEL (the model's direct ancestor), Eigen quasispecies/error threshold, Wilke survival-of-the-flattest, Shannon/coding theory; (15) distance-sweep = ONE landscape per point (distance confounded with peak identity); (4) baseline/multi-peak differ in effective pop structure not just selection; (8) mechanism is correlational not a decisive manipulation; (2) landscape never characterized. Verdict: major revision, mostly additive fixes. Nothing running.
+
+## Session — July 12, 2026 (cont.) — 2nd/3rd reviewer rounds + revisions (in progress)
+
+Wrote Reviewer_Report_2.md (fresh read; new points: exact-match colonization brittleness, dictionary-contains-all-target-words favorability, abstract "0.90 of reachable peaks" precision, valley-remnant-as-artifact, niche-slots interpretation, inverted-U on 4 points, Significance overreach). Consolidated with Reviewer_Report.md.
+
+CODE (verified safe, seed-match 5/5 identical at default): bfg_stage2.py SIMILARITY_THRESHOLD now reads env BFG_SIM_THRESHOLD (default 0.80); run_stage2.py gains --colon-fit (relaxed colonization) + records colonization_fitness & similarity_threshold in manifest.
+
+RUNS LAUNCHED (transparent, seeded, manifests): (1) data/asymptotic = close peaks scalars 0.5+1.0 20 reps max_gens 1500 (coverage-vs-speed under extended budget). (2) run_robustness_jul12.sh (queued after asymptotic): relaxed colonization colon_fit 0.90/0.95; corrector-threshold BFG_SIM_THRESHOLD 0.70/0.80/0.90; multi-landscape distance 3 peak-sets x 3 levels (mpw~50/60/70) to de-confound distance from peak identity.
+
+PROSE EDITS DONE (both reports): ruggedness reframe (multiplier=noise not landscape); abstract "0.90 of five peaks" fix; landscape characterization added (100 targets, len 53-109, median pairwise edit dist 60, uneven basins); Eigen quasispecies, Wilke survival-of-flattest, Dawkins weasel(1986), Shannon coding added (in-text + 4 refs); dictionary-completeness caveat; valley-remnant substantive + persists at vcap0; baseline/multi-peak comparability caveat; mechanism-is-correlational caveat; "colonized to completion" defined; multiplicity note; Significance scoped ("in this model"); caption n added. Landscape char analysis fully from raw data.
+
+PENDING: integrate asymptotic + robustness run results into manuscript & supp; update supp methods (threshold/colonization/robustness); rebuild; final verify. Runs in progress.
+
+---
+
+## 2026-07-13 — Robustness round complete; asymptotic reframe; second reviewer report closed
+
+ALL RUNS FINISHED. Results computed from raw CSVs via analysis/analyze_robustness.py (re-verified 2026-07-13, every number below reproduces).
+
+ASYMPTOTIC (data/asymptotic, close peaks, pooled scalars 0.5+1.0, to gen 1500): ECM leads throughout but gap peaks (~1.0 peak near gen 1000) then narrows to 0.60 by gen 1500 (ECM 2.67 vs noECM 2.08). HONEST REFRAME: coverage claim changed from "not merely speed" to accelerated, more reliable coverage at a given horizon rather than a higher asymptote. Fig S3 (figS_asymptotic.png) + main-text "Is this coverage, or faster speed?" paragraph.
+
+RELAXED COLONIZATION (scalar 1.0): exact 1.20/0.55 gap 0.65; 0.95 crit 2.00/1.00 gap 1.00; 0.90 crit 3.55/1.85 gap 1.70. Advantage persists and grows in absolute terms, ratio ~2:1 → finisher not exact-match-specific.
+
+CORRECTOR THRESHOLD (scalar 1.0): 0.70 gap 0.65; 0.80 gap 0.65; 0.90 gap 0.30. Stable 0.70-0.80, weaker at strict 0.90 → not a knife-edge of 0.80.
+
+MULTI-LANDSCAPE (12 reps, scalar 1.0, gaps): lvl~50 [0.75,0.58,0.50]; lvl~60 [0.25,0.42,0.17]; lvl~70 [0.08,0.08,0.17]. ECM led in all 9 → advantage not peak-identity-specific; earlier single parity case was one idiosyncratic peak set. Gap shrinks with distance.
+
+MANUSCRIPT: added main-text "Robustness of the coverage result." paragraph; small-count-instability caveat (ratios of small counts, rely on pooled means/CIs); coarse-mutation-sampling caveat (4 multipliers, optimum only within moderate range); single-dictionary/small-seed-set generality caveat; dictionary-augmented-with-target-words + corrective-set-may-not-contain-solution caveat; per-peak-slots as carrying-capacity abstraction; Significance/Discussion aligned ("In this model", proof of principle). SUPP: added S15 Robustness (3 tables). Both reviewer reports (Reviewer_Report.md, Reviewer_Report_2.md) fully closed.
+
+REBUILT: manuscript + supp docx; submission_PNAS_Nexus/{Manuscript,Supplementary,Manuscript_with_Supplementary}.{md,docx}. Style clean (no prose semicolons/em-dashes). Merged docx: 9 images, 5 tables. Author-side [AUTHORS] items still open: baseline Fig 2 (needs unconfounded rerun or original SVGs), final title/affiliations, reference verification.
+
+---
+
+## 2026-07-13 (later) — External-critique pass: pipeline audit + Fig S3 aggregation bug fixed
+
+Triggered by an external (GPT) editor+reviewer critique. Fact-checked all six of its concrete claims about our files against code/data: ALL confirmed true. Highest-value finding = a real aggregation bug.
+
+AGGREGATION BUG (Fig S3 / asymptotic). analyze_robustness.py aggregated the CUMULATIVE peaks_colonized onto a common generation grid with `.get(g,0)`, so runs that stop early (blanket / no-progress patience) were read as ZERO at late generations, biasing the mean down and making the mean curve spuriously non-monotonic (dips at gen 800, 1425). Per-run values are monotonic (0 within-run decreases); the defect is purely in aggregation. FIX = carry-forward each terminated run's last cumulative count. Corrected headline: gen1500 ECM 2.67->2.92, noECM 2.08->2.20, gap 0.60->0.72; curve now monotonic.
+
+PIPELINE AUDIT (blast radius). Checked every per-generation aggregation site. Three use the vulnerable pattern on cumulative peaks_colonized: (1) analyze_robustness.py asymptotic -> Fig S3 = BUGGED (3/80 runs terminate early). (2) make_pub_figures.py fig6 -> Fig 7 recovery = pattern present but 0/80 early terminations, so output byte-identical (verified md5 unchanged before/after fix); numbers CORRECT. (3) analyze_ext_window.py = same clean data, CORRECT. Fig S2 (ext-timing) uses per-run SUMMARY values, structurally immune. mean_fitness/mean_mut trajectories are instantaneous quantities, not the cumulative bug. => bug's real impact contained to Fig S3 only. Hardened all three sites with carry-forward defensively (identical output where clean).
+
+PROSE. Fig S3 numbers corrected in main text + SI caption. Asymptotic wording adjudicated: dropped "not a higher asymptote" (unsupported) -> "these runs do not identify whether the two conditions converge to the same long-run coverage" + "we do not claim a higher long-run asymptote"; both conditions still below the 5-peak ceiling. SI caption documents the cumulative/carry-forward rule for reproducibility.
+
+CONSISTENCY FIXES (all confirmed real). (a) Placeholders: filled repo link (github.com/ericcgladstone-maker/bfg-corrective-replicator) + archived-data link (OSF DOI 10.17605/OSF.IO/K2PH7) + audit-disclosure sentence; Fig 2 baseline converted to a clean [AUTHOR ACTION REQUIRED] (genuinely missing, cannot fabricate from confounded v6). Zero [AUTHORS:] markers remain. (b) SI figure cross-refs off-by-one (from Fig 2 insertion): geometry Fig 3->4, pruning Fig 4->5, recovery Fig 6->7. (c) Ruggedness-dial contradiction: SI text + Table S1 said "ruggedness dial"; changed to "copying-noise dial" to match the main-text reframe. (d) Distance-shrink self-contradiction: main-text Fig 4 para said advantage "did not systematically shrink" while the robustness para + SI say it shrinks 0.6->0.1 across 9 landscapes; rewrote the Fig 4 para to acknowledge the noisy single-landscape ladder and defer to the better-powered replicated design.
+
+REBUILT all docx; verified no stale 2.67/2.08, corrected 2.92/2.20 present, style clean.
+
+DEFERRED / FLAGGED FOR AUTHORS (not done, need Eric+Matt): Fig 2 baseline figure; Fig 5 reaper "asymmetry" framing + polyfit trend lines + exploratory demotion (Matt's resolved comment 1 — the figure axis is already correctly labeled distance and the text already hedges "proxy for asymmetry", so GPT partly misread; interpretive call); title/abstract/Significance per-peak-retention conditioning; cross-domain transport-conditions reorg; and the one high-yield NEW run = unaugmented-dictionary ablation (Bucket 2, worth a Matt ping). Occupancy/persistence metrics may be derivable from existing per-gen data.
+
+---
+
+## OPEN AUTHOR-SIDE ITEMS (standing, as of 2026-07-13)
+
+Not blockers for internal consistency (the manuscript is now placeholder-free except item 1, numerically corrected, and self-consistent), but these need Eric/Matt judgment before submission:
+
+- **Fig. 2 baseline (submission-blocking).** Still a genuine missing figure. Caption is written; needs the canonical Stage 1 baseline panel or the original manuscript Figure 1. Do NOT use the repository v6 verification run (confounded 80%-coverage variant).
+- **Fig. 5 reaper / "asymmetry" framing (Matt's resolved comment 1).** The figure axis is already labeled "mean inter-peak distance" and the text already hedges it as a proxy for asymmetry, so the external critique partly misread this. Open calls: whether to drop the polyfit trend lines, purge the word "asymmetry," and/or demote the reaper result to exploratory. Matt's call since it is his settled comment.
+- **Per-peak-retention conditioning.** Consider stating explicitly in the title/abstract/Significance that the coverage result is conditional on target-specific protected capacity (an imposed enabling condition, which is the modeling contribution, not a hidden confound). Framing decision.
+- **Cross-domain framing.** Option to reorganize the Discussion analogies around explicit transport conditions (codebook, source of solution-relevant information, mechanism protecting alternatives from competitive exclusion) rather than trimming them. Framing decision, interacts with the system-level-ECM framing Matt liked.
+- **Highest-yield NEW analysis (Bucket 2): unaugmented-dictionary ablation.** The dictionary is augmented with all target words, so the admissible set contains every solution component (already disclosed in the Discussion). A single run with the un-augmented base dictionary would directly address the "oracle" alternative explanation. Worth a Matt ping; even a null/attenuated result improves the paper by identifying codebook-solution alignment as a boundary condition.
+- **Occupancy vs. arrival.** "Colonized" = cumulative ever-reached. Concurrent-occupancy and persistence-after-arrival metrics may be derivable from existing per-generation CSVs (no new runs) and would clarify what "coverage" means. Optional.
+- Prior standing author items unchanged: final title, affiliations/ORCIDs/corresponding author, reference-list verification.
+
+---
+
+## 2026-07-13 (later still) — GPT round 3 punch-list + dictionary-alignment ablation
+
+VERIFICATION FINDING (drove several edits): there is NO runtime dictionary augmentation. load_real_data loads a general 110,879-word English dictionary; all 633 distinct target words are already in it (targets are ordinary English sentences). So the paper's "base list augmented with target words" was inaccurate. Corrected everywhere to "a general English dictionary that contains every target word" (Methods, Discussion, SI S2, Table S1). More accurate AND more defensible.
+
+PUNCH-LIST EDITS (GPT round 3, all applied to manuscript+SI): target-blind wording softened (Methods "never references the targets" and SI "blind to the targets" -> "not target-directed / does not reference targets during a run, although its dictionary contains the target vocabulary"); residual asymptotic claim removed from BOTH Abstract and Discussion (-> "substantial temporal component ... long-run coverage unresolved"); Fig 5 reframed from "asymmetry" to the manipulated quantity (inter-peak distance), reachability-inequality noted as one un-measured interpretation; Significance/Conclusion trimmed ("settle","diversity/diversification" -> "range of solutions reached"); pooling made exact (verified 320/condition = 160+160, ZERO seed overlap between draws -> independent; "about 320"->exact; code-equivalence explicitly separated from statistical independence).
+
+DICTIONARY-ALIGNMENT ABLATION (new run). Added run_stage2.py --drop-target-words (removes the peak targets' words from the dictionary, rebuilds the trigram index; seeds/peaks/params otherwise identical). Analyzer analysis/analyze_dict_ablation.py (all numbers from raw CSV). Data data/dict_ablation (exact) + data/dict_ablation_relaxed (colon 0.90). RESULTS (close peaks, scalar 1.0, top_fitness, 20 reps): full-dict correction 1.20, reduced-dict correction 0.00, no correction 0.55; no-correction seed-IDENTICAL to full run (20 shared, 0 mismatch) => manipulation touched only the correction path. Relaxed 0.90: 3.55 / 0.00 / 1.85. ATTAINABILITY (heeding GPT's caution): reduced-dict correction caps best-individual fitness at mean ~0.76 (0/20 reach 0.90) vs ~0.98 no-correction (20/20 reach 0.90). So the relaxed 0.90 is NOT attainable under the reduced dict -> the relaxed run does NOT independently disentangle the exact-match criterion (as GPT predicted); both zeros reflect the same fitness cap.
+
+FRAMING (deliberate, per GPT): reported as a NECESSITY / boundary-condition test, NOT a causal decomposition. Removing the target words both withdraws guidance AND makes the operator actively reject correctly-generated target words (anti-alignment), so 1.20 vs 0.00 is the effect of deleting target words incl. anti-alignment, NOT a clean mediation estimate. Explicitly did NOT write "entire advantage attributable to alignment." Integrated as SI S16 (with table + the two interpretation cautions) and a Discussion boundary-condition paragraph (caveat converted to result). Headline unchanged.
+
+REBUILT all docx; audit clean (1 placeholder = Fig 2; ablation content present; 6 SI tables; no prose semicolons/em-dashes; no stale augmented/about-320/asymmetry terms). Fig 2 remains the sole hard submission blocker.
+
+---
+
+## 2026-07-13 (GPT round 4 — literal-consistency punch-list)
+
+Applied all 6 sentence-level corrections: (1) intro "adds no new content / no information about where solutions are" -> "does not reference target identities during a run but constrains outputs to a vocabulary that contains the target words"; (2) Fig 5 GRAPHIC regenerated (fig4_reaper.png md5 changed) with new panel titles ("Fitness pruning retains coverage as peaks spread apart" / "Fitness-pruning advantage across inter-peak distance"), caption "become unequal"->"at wider inter-peak distances"; (3) Discussion Fig 5 inference "helps most when peaks are unequal" -> "increasing advantage ... across the inter-peak distance gradient"; (4) "general property of correction" -> "robust within this model when the correction codebook contains the components of the target solutions"; (5) "withdraws guidance" -> "eliminates codebook support for solution components and makes the corrector actively reject those components when mutation generates them"; (6) arrival/occupation: "how much of a landscape it can occupy"->"how many target peaks it reaches within a finite horizon", "hold several peaks"->"several target-specific lineages retained in parallel", "complete and hold solutions"->"complete solutions and reach more of them". All docx rebuilt; audit clean; Fig 2 = only remaining blocker.
+
+---
+
+## 2026-07-13 (visual restructure — new main-text figure architecture)
+
+Full visual pass (GPT figure review). New figure module analysis/make_pub_figures2.py builds 3 new multi-panel main-text figures from EXISTING data (no new runs); all verified by reading the PNGs.
+
+NEW MAIN-TEXT LINEUP (was 7 figs -> now 6, argument = effect -> timing/generality -> mechanism -> boundary):
+- Fig 1 schematic (unchanged), Fig 2 baseline (placeholder, still the only blocker), Fig 3 headline coverage (unchanged, fig2_coverage).
+- Fig 4 fig4_robustness.png (NEW, 2 panels): A = time-to-coverage cumulative incidence P(>=1),P(>=2) vs gen (from asymptotic); B = nine independently-sampled landscapes, advantage vs mean inter-peak distance w/ 95% CI (from multiland). Merges old asymptotic + distance sections.
+- Fig 5 fig5_mechanism.png (NEW, 4 panels): A P(reach band>=0.90) 1.00 vs 0.86; B P(exact|band) 0.74 vs 0.42 (conditional/descriptive); C ECDF time band->match median 70 vs 86 gen; D colonization sources counts (valley 121/71, in-place 168/50, peak 0/0). From run2 per-gen + summary.
+- Fig 6 fig6_boundary.png (NEW, 3 panels): A niche capacity (slots); B codebook ablation peaks (1.20/0.00/0.55) run-level; C best fitness (~0.998/~0.755/~0.984) run-level w/ 0.90 line. Merges capacity + codebook (promoted from Discussion).
+
+MOVED TO SI: distance ladder -> Fig S4 (design-development), pruning -> Fig S5 (+ brief results prose), recovery -> Fig S6. SI now S1-S6 figures. Discussion codebook paragraph TRIMMED to theory + pointer (no duplicated numbers), elevated to "correction is adaptive only when its constraint system is compatible with the viable states." Robustness paragraph compressed (multiland now in Fig 4B; pruning/recovery pointered to SI).
+
+NEW SI TABLES (S17): experiment inventory (12 analyses -> factors/landscapes/runs/outcome/figure/data-folder) and model-to-construct map (element/role/interpretation/scope-condition).
+
+Cross-refs all updated (no stale Fig.7). Rebuilt all docx: 11 images (5 main + 6 SI), 8 tables, 0 em-dashes, 1 placeholder (Fig 2), main text ~5,514 words. All figure numbers from analyze_dict_ablation.py / make_pub_figures2.py, regenerable from raw CSV.
+
+---
+
+## 2026-07-13 (figure-refinement pass — GPT visual review)
+
+Refined the 3 new figures in make_pub_figures2.py (regenerated + eyeballed each) and updated captions.
+- Fig 4A: encoding now color=condition (blue/orange), style=threshold (solid >=1, dashed >=2); explicit dotted "standard horizon" line at 500 gen. Fig 4B: added horizontal jitter, outlined green mean-advantage diamonds per distance, zero line; caption -> "estimated advantage positive in each sampled landscape ... several individual-landscape intervals include zero".
+- Fig 5A/B: n/N denominators above bars (160/160, 137/160, 119/160, 57/137); caption names Wilson intervals. Fig 5C: median lines (70, 86) + risk-set n in legend; caption states conditional on band entry AND completion. Fig 5D: within-condition % annotated alongside counts.
+- Fig 6B: stacked-dot plot for the discrete integer outcome (all 20 reduced-dict runs visibly at 0). Fig 6C: explicit y-axis 0.70-1.01 with "axis begins at 0.70" annotation + "0.90 band" label.
+- Prose: "property of correction" -> "not an artifact of one target arrangement ... conditional on the model's correction codebook and selection architecture"; Discussion opener "Error correction, despite adding no new content" -> "Dictionary-based correction, despite constraining variation".
+- House-style: removed 6 semicolons I introduced in captions/SI (now periods/commas). Final sweep: prose semicolons = citations only, 0 em-dashes.
+Rebuilt all docx: 11 images, 8 tables, 1 placeholder (Fig 2 = only blocker). Visual package now carries the paper.
+
+---
+
+## 2026-07-13 (mechanism experiment — fitness-gated correction — COMPLICATES the finisher story)
+
+Added fitness-gated correction to test the "finishing" mechanism directly. bfg_stage2.py: Stage2Config.correction_gate ('above'/'below'/None) + gate_threshold (0.90); correction decided from the PRE-correction (mutated) fitness to nearest peak. Harness: --correct-gate / --gate-threshold, threaded through _init/_run/manifest/initargs. BEHAVIOR-PRESERVED: correction_gate=None branch is literally the original `cs = correct(...)`; verified no-correction arms seed-identical (20/0) and default correction path (nogate_check2 ecm1 vs simthresh_0.80 ecm1, 2/0). Analyzer analysis/analyze_gate.py (all from raw CSV). Data data/gate_above, data/gate_below.
+
+RESULT (close peaks, scalar 1.0, top_fitness, 20 reps, gate 0.90): full correction 1.20; correct >=0.90 ONLY (near-peak finishing) 1.05 (77% of benefit); correct <0.90 ONLY (far-from-peak climb) 1.25 (108%); no correction 0.55.
+
+HONEST INTERPRETATION: the prediction (near-peak finishing retains most, far-from-peak collapses) FAILED. BOTH gated conditions recover ~full benefit; far-only (1.25) is statistically indistinguishable from full and slightly above near-only (1.05). => the strong "correction works by finishing the climb" claim is NOT supported and mildly contradicted. Correction's benefit is not localized to the final step; the broad-climb constraint matters at least as much. The Fig 5B "completion conditional on band entry" edge is consistent with correction producing more/better-positioned band arrivals rather than a privileged final snap (vindicates the conditional/descriptive caveat). Mechanism reframes from "finisher" to "correction helps across the whole climb by holding variation on the valid-form manifold; the benefit does not depend on the finishing step and either stage alone recovers most of it." NEEDS author decision on how far to soften the finisher framing (abstract "acts as a finisher", Fig 5 header "Correction works by finishing the climb", Discussion) — central claim + Matt's domain. NOT yet integrated into manuscript pending that decision.
+
+ALSO applied this session (claim hierarchy, pre-experiment): title -> "Error correction accelerates multi-target adaptation under compatible constraints" (rugged dropped, provisional); abstract confident sentence + relative magnitude (more than doubling, 71 vs 36%) + consolidated boundary conditions + "constrained variation can aid adaptation when the constraint set preserves viable states"; Discussion 3-sentence adjudication opener; cross-domain reframed to transport conditions (possible cases not established instances). NOTE: the abstract still says "correction acts as a finisher" — now in tension with the gate result; flag for the framing decision.
+
+---
+
+## 2026-07-13 (mechanism experiment — FINALIZED with sensitivity, paired contrasts, exposure)
+
+Closed the gating experiment per the approved refinements. All reproducible via analysis/analyze_gate.py (paired contrasts + sensitivity + exposure) and run_stage2.py (model instrumented with per-run offspring_total/offspring_ge_gate/offspring_corrected; determinism verified — colonization byte-identical after instrumentation).
+
+PAIRED CONTRASTS at 0.90 (shared seeds, n=20): full-above +0.15 [-0.18,+0.48], full-below -0.05 [-0.38,+0.28], below-above +0.20 [-0.32,+0.72] — no two conditions differ detectably AT 0.90. (Replaced the eyeballed "statistically comparable".)
+
+THRESHOLD SENSITIVITY + EXPOSURE (dose = corrected/total offspring; data/gate_{above,below}_{0.85,0.90,0.95}_ex):
+  0.85: above 1.50 (dose 41%), below 1.00 (55%)
+  0.90: above 1.05 (dose 24%), below 1.25 (71%)
+  0.95: above 0.65 (dose 9%),  below 1.30 (87%)
+KEY: the 0.90 near-parity is threshold-specific; outcome tracks dose. Near-target correction is EFFICIENT (recovers most of the benefit at ~1/4 the dose); the below-gate's success reflects near-full exposure (corrects most of the trajectory). Correcting only the >=0.95 sliver (9% dose) recovers little (0.65 ~ none).
+
+HONEST FRAMING (observation vs mechanism, per GPT): dropped "acts as a finisher" / "works by finishing the climb" / "single mechanism" / "partly substitutable/redundant/statistically comparable" as CLAIMS. Now: correction acts across a broad part of the approach, not a single narrow stage (observation); "consistent with partial substitution ... design does not establish distinct vs shared process" (labeled interpretation); value concentrated in correcting higher-fitness approach variants, not the exact final step; near-target correction efficient. Integrated into abstract, Results (Fig 5 section "improves both approach and completion"), Discussion, and SI S17 (table + paired contrasts + exposure). Fig S7 retitled observational ("Target attainment under fitness-gated correction"). Title now "Error correction accelerates multi-target adaptation under compatible constraints".
+
+STATE: all docx rebuilt (12 images, 9 tables, 0 semicolons/em-dashes, 1 placeholder = Fig 2). ANALYSIS PHASE CLOSED per GPT's checklist (sensitivity done, paired contrasts done, exposure done; Fig 2 = author-side). Paper now at prose-editing/consistency stage. Central claim to govern all sections: "In a model with protected target-specific lineages, dictionary-based correction more than doubles finite-horizon target attainment; the effect does not depend on correction at a single stage but requires a corrective constraint set compatible with the target components." No further simulations unless a check reveals a contradiction.
+
+---
+
+## 2026-07-13 (GLOBAL MECHANISM RECONCILIATION — finisher language purged paper-wide)
+
+GPT caught that my earlier phrase-specific audit MISSED pervasive "finish/finisher/finishing" language that contradicted the gating result (the paper conceded the new result locally but kept the old causal story in Significance, Intro, Fig 1, Discussion, SI). Fixed globally (18 prose edits + Fig 1 Panel B redraw):
+- Significance: "protecting nearly-correct variants long enough to finish the final step" -> "constraining variation toward admissible forms ... much of the benefit retained even when correction acts on only part of the trajectory"; "most changes are harmful" -> "many changes are neutral or harmful, and high error can erode working structure".
+- Intro: "it works by helping nearly-correct lineages finish ... same finishing logic also governs pruning/recovery" -> "the mechanism is not confined to a final completion step ... related patterns ... consistent with the same constrained-variation account".
+- Fig 1: retitled "The model and how correction constrains variation"; Panel B GRAPHIC REDRAWN (make_schematic.py) from a peak-climb "held until it finishes" to a constrained-variation schematic (admissible set containing target components; uncorrected mutation disperses broadly; correction projects offspring onto the admissible set).
+- Main mechanism passage: removed "value is concentrated ... rather than the exact final step" and "mechanical consequence" (location/exposure confounded) -> GPT's defensible statement: correction confined to moderate-high-fitness offspring preserves much of the advantage while acting on a minority; "the design does not separate the effect of state location from the amount of correction delivered".
+- Discussion: deleted the "undirected diversity is mostly wasted motion ... follows directly from treating correction as a finisher" paragraph -> pruning is "suggestive rather than a separate mechanism test"; "finishing mechanism holds" -> "correction advantage holds".
+- Robustness (main+SI): "finishing effect is not specific to requiring exactness" -> "coverage advantage is not specific to requiring exact matches". SI pruning "same finishing logic" -> "constrained-variation account".
+- TERMINOLOGY: "dose" -> "correction exposure" everywhere (offspring_corrected counts CALLS to correct(), i.e., offspring subjected to correction, NOT substitutions; analyze_gate.py comment + labels updated). SI S17 table header "above/below exposure".
+- OCCUPANCY: "occupy several peaks at once" -> "several target-specific lineages retained in parallel" (abstract + intro). RUGGEDNESS: model-describing "rugged" -> "structured/multi-peak" (abstract, conclusion, Discussion); kept only the theory-context uses and the disclaimers that say ruggedness is fixed by targets.
+
+Audit clean: 0 finisher-as-mechanism, 0 "occupy several peaks"/"dose", exposure terminology in place, Fig 1 redrawn, 0 semicolons/em-dashes, 12 images/9 tables, 1 placeholder (Fig 2). Governing spine now expressed consistently across all sections. Analysis closed; remaining = Fig 2 (author) + conventional prose compression/formatting.
+
+---
+
+## 2026-07-13/14 (overnight) — FIGURE 2 REGENERATED; last placeholder cleared; HONEST BASELINE FINDING
+
+Regenerated the single-peak baseline with the current verified code (run_baseline_fig2.py: run_one global-top-N reaper over the full 100-target environment; pop 1000, 10 offspring, 500 gens, multipliers 0.25/0.5/1.0/1.5, correction on/off, 20 reps, seeded+manifest; durable/resumable incremental writes; self-healing monitor). Data data/stage1_baseline (160 runs, 48,141 rows). Figure analysis/make_fig2_baseline.py -> figures/pub/fig2_baseline.png. Placeholder count now 0 across manuscript + SI.
+
+*** IMPORTANT HONEST FINDING (flag for Matt) ***
+The regenerated baseline reproduces the CORE claim (correction speeds convergence on a single peak, especially under high mutation) but NOT two over-specific claims in the old Fig 2 text:
+- "produced more exact solutions than non-correcting populations" -> FALSE at low/moderate mutation. Final mean fitness: mult 0.25 ecm 0.936 / no 0.942; 0.5 0.973/0.952; 1.0 0.958/0.964; 1.5 0.937/0.852. The conditions are statistically TIED (CIs overlap) up to mult 1.0 (correction even slightly behind at 0.25 and 1.0); correction wins clearly ONLY at 1.5. Exact-solution counts similar at low/mod mutation (both converge in 500 gens).
+- "non-correcting populations briefly fitter in the first few dozen generations" -> NOT REPRODUCED. First-8-gen ecm-minus-no diffs = +0.000..+0.006; no crossover, correction leads throughout.
+What IS solid: correction reaches mean-fitness 0.90 SOONER at every multiplier (time-to-0.90: 144 vs 170 @0.25; 162 vs 199 @1.0; 217 vs never @1.5) and BUFFERS against mutation (at 1.5 no-correction stalls at 0.85 / 0 exact solutions while correction climbs to 0.94). Gap widens with mutation = TRUE.
+
+ACTION TAKEN (honest, no hallucination): built Fig 2 to the actual data (Panel A = faster climb at mult 1.0 w/ 95% bands; Panel B = final fitness across 4 multipliers w/ 95% CI, buffering at 1.5). REWROTE the Results paragraph + caption to drop the two unsupported claims and keep speed + high-mutation buffering. Updated SI inventory row (data source stage1_baseline, full target env, 20 reps, outcome mean fitness). Abstract's "speeds convergence ... especially under high mutation" unchanged (accurate).
+
+REVIEW NOTE FOR AUTHORS: since Fig 2 is framed as reproducing the earlier published single-peak result, and the current reimplementation over the 100-target environment does NOT reproduce the "more exact solutions at all rates" or "early crossover" specifics, Matt should confirm whether the original result was at a single dedicated target (which could differ) or whether the softened framing is acceptable. Core reproduction (speed + high-mutation buffering) holds.
+
+STATE: all docx rebuilt, 0 placeholders, 13 images (Fig 2 in), 9 tables, 0 em-dashes/prose semicolons, ~9,930 words. Paper fully assembled. Everything from raw CSV.
+
+---
+
+## 2026-07-14 — FINAL SUBSTANTIVE REVISION PASS (claim hierarchy, compression, consistency)
+
+Comprehensive consistency+compression pass per author spec. Terminology audit now fully clean (0 stale terms). Changes:
+- CLAIM HIERARCHY: Significance rewritten (4-function, compressed, dropped universal "most changes harmful"); Abstract mechanism sentence -> "earlier states or near-target region ... not confined to a single stage, though not a uniquely dominant one"; Discussion REBUILT to 5 paragraphs + compatible-constraints landing (adjudication / mechanism=constrained variation / transport conditions / cross-domain candidate-cases / consolidated limitations), removed the "raw novelty" reframe para and the cross-domain slogan ending and "protecting the final approach" language.
+- COMPRESSION: Intro tightened ("real problem"->concentrating variation; dropped "reach and hold many"); mechanism Results split from one run-on into 3 clean paragraphs (Fig 5 / gating / threshold-exposure) with the full sweep+contrasts left in SI; headline best-run extremes deleted, added 0.52 abs / 137% rel framing. Main text ~5,514 -> ~5,352 words.
+- TERMINOLOGY: "no information about which target"->"does not reference target identities during a run"; "ruggedness of the landscape"->"landscape geometry" (main x2 + SI); SI "hold several peaks"->"retain several target-specific lineages".
+- FIGURES: Fig 3 SE->95% CI (regenerated, caption + Methods CI statement updated).
+- REFERENCES: removed 5 orphaned uncited entries (Eldredge 1972, Griffiths 2008, Odling-Smee 2003, Oliveira 2026, Rajewsky 2006); ref list now fully reconciled (every cite has a ref, every ref cited; Centola cited, line-wrapped).
+- VERIFIED unchanged-correct: model-to-construct table, SI inventory (Fig 2 present, Fig S7, S17/S18), Fig 5 denominators/conditional caveats, Fig 6C axis note, boundary + codebook wording.
+State: 0 placeholders, 0 em-dashes/prose-semicolons, 13 images, 9 tables. All numbers from raw CSV.
