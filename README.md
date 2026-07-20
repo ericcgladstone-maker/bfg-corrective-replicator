@@ -129,6 +129,10 @@ In the multi-peak model, a replicator's fitness is its similarity to its single 
 
 ## Deviations from the original Java simulation
 
+The original Java implementation is preserved here in `original_java/`, and is maintained at its
+canonical repository, https://github.com/lardener/BFG, whose commit history documents how the model
+developed. The table below lists where this implementation deviates from it.
+
 | # | Item | Java | This implementation | Reason |
 |---|------|------|---------------------|--------|
 | 1 | Word scoring | Count-based (multiset) | Set-based | Paper methods text specifies a set of words |
