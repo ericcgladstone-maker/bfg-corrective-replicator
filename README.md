@@ -142,6 +142,8 @@ developed. The table below lists where this implementation deviates from it.
 | 5 | Levenshtein library | Apache Lucene | rapidfuzz / pure Python | Verified identical results |
 | 6 | Word correction | Apache Lucene FuzzyQuery | Custom trigram index | Equivalent algorithm, independently verified |
 | 7 | Language | Java | JavaScript and Python | Portability |
+| 8 | Mutation character pool | 54 characters (A–Z, a–z, `-`, `'`), so each letter is ~2× as likely as either punctuation mark | 28 characters (a–z, `-`, `'`), drawn uniformly | Text is lowercased for scoring and correction, so case is immaterial; only the relative rate of punctuation substitution/insertion differs, not fitness or correction outcomes |
+| 9 | Dictionary target words | Scrubbed target words added to the dictionary at load time | General 110,879-word list used as-is; no words added | All 633 target words are already in the general list (verified 0 missing), so the effective codebook is identical for the target set studied |
 
 ## Dictionary
 
