@@ -1,0 +1,81 @@
+{
+  "purpose": "mutation-pool sensitivity A/B: python 28-char uniform vs java 54-char effective, identical seeds",
+  "design": {
+    "peaks": "close",
+    "k_peaks": 5,
+    "scalars": [
+      0.5,
+      1.0
+    ],
+    "reps": 20,
+    "valley_reaper": "top_fitness",
+    "valley_capacity": 200,
+    "slots_per_peak": 10,
+    "max_generations": 500,
+    "exit_fitness": 0.99999,
+    "similarity_threshold": 0.8,
+    "stop_on_blanket": true
+  },
+  "pools": {
+    "python_28_uniform": "abcdefghijklmnopqrstuvwxyz-'",
+    "java_54_effective": "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz-'"
+  },
+  "peak_indices": [
+    0,
+    13,
+    16,
+    36,
+    84
+  ],
+  "peaks": [
+    "might you not know she would do as she has done by sending me a letter",
+    "first i would have you note this is an honourable man",
+    "when you are gentle you shall have one too and not till then",
+    "if you knew how much they do to import you would make haste",
+    "nay you need not to stop your nose sir i spake but by a metaphor"
+  ],
+  "seeds": [
+    "it was getting dark and we werent there yet",
+    "joe made the sugar cookies susan decorated them",
+    "i really want to go to work but i am too sick to drive",
+    "she only paints with bold colors she does not like pastels",
+    "cats are good pets for they are clean and are not noisy",
+    "she wrote him a long letter but he didnt read it",
+    "we have never been to asia nor have we visited africa",
+    "i love eating toasted cheese and tuna sandwiches",
+    "the sky is clear the stars are twinkling",
+    "i am counting my calories yet i really want dessert",
+    "she advised him to come back at once",
+    "she was too short to see over the fence",
+    "the quick brown fox jumps over the lazy dog",
+    "he ran out of money so he had to stop playing poker",
+    "the memory we used to share is no longer coherent",
+    "if i dont like something ill stay away from it"
+  ],
+  "bfg_stage2_md5": "da0c3832aca5a80524ad09c47f452ac3",
+  "n_per_condition": 40,
+  "total_runs": 160,
+  "data_source": "BFG_Simulation_v6.ipynb (canonical dict/targets/seeds)",
+  "result": {
+    "python_28_uniform": {
+      "ecm_mean": 1.1,
+      "ecm_se": 0.09874208829065749,
+      "ecm_reach1_pct": 85.0,
+      "noecm_mean": 0.625,
+      "noecm_se": 0.08431710977020027,
+      "noecm_reach1_pct": 60.0,
+      "advantage_ratio": 1.7600000000000002,
+      "n_per_condition": 40
+    },
+    "java_54_effective": {
+      "ecm_mean": 1.15,
+      "ecm_se": 0.09048480535426928,
+      "ecm_reach1_pct": 92.5,
+      "noecm_mean": 0.775,
+      "noecm_se": 0.08282134386738722,
+      "noecm_reach1_pct": 72.5,
+      "advantage_ratio": 1.4838709677419353,
+      "n_per_condition": 40
+    }
+  }
+}

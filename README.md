@@ -30,6 +30,7 @@ The work has two parts:
 | Run multi-peak experiments | `analysis/run_stage2.py` (and the `run_*.sh` drivers) |
 | Regenerate the figures | `analysis/make_pub_figures.py`, `analysis/make_schematic.py` |
 | Audit the reported numbers | `analysis/audit_recompute.py` |
+| Mutation-pool sensitivity check | `analysis/pool_sensitivity.py` (data in `data/pool_sensitivity/`) |
 | Session history and decisions | `docs/BFG_Dev_Log.md` |
 | Audit report | `docs/BFG_Audit_Jul9.md` |
 
